@@ -56,6 +56,13 @@ namespace MbientLab.MetaWear.Template {
         }
 
         private Fn_IntPtr accDataHandler = new Fn_IntPtr(pointer => {
+            System.Diagnostics.Debug.WriteLine("Acceleration:");
+            Data data = Marshal.PtrToStructure<Data>(pointer);
+            System.Diagnostics.Debug.WriteLine(Marshal.PtrToStructure<CartesianFloat>(data.value));
+        });
+
+        private Fn_IntPtr gyroDataHandler = new Fn_IntPtr(pointer => {
+            System.Diagnostics.Debug.WriteLine("Gyroscope");
             Data data = Marshal.PtrToStructure<Data>(pointer);
             System.Diagnostics.Debug.WriteLine(Marshal.PtrToStructure<CartesianFloat>(data.value));
         });
@@ -67,7 +74,13 @@ namespace MbientLab.MetaWear.Template {
             mbl_mw_datasignal_subscribe(accSignal, accDataHandler);
             mbl_mw_acc_enable_acceleration_sampling(cppBoard);
             mbl_mw_acc_start(cppBoard);
-            System.Diagnostics.Debug.WriteLine("Start button hit.");
+            // System.Diagnostics.Debug.WriteLine("Start button hit.");
+
+            IntPtr stateSignal = mbl_mw_gyro_bmi160_get_rotation_data_signal(cppBoard);
+
+            mbl_mw_datasignal_subscribe(stateSignal, gyroDataHandler);
+            mbl_mw_gyro_bmi160_enable_rotation_sampling(cppBoard);
+            mbl_mw_gyro_bmi160_start(cppBoard);
 
         }
 
