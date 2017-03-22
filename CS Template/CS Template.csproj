@@ -101,6 +101,8 @@
     <Compile Include="DeviceSetup.xaml.cs">
       <DependentUpon>DeviceSetup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MadgwickAHRS.cs" />
+    <Compile Include="MahonyAHRS.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

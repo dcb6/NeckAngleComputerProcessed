@@ -32,7 +32,8 @@ namespace MbientLab.MetaWear.Template {
         /// Pointer representing the MblMwMetaWearBoard struct created by the C++ API
         /// </summary>
         private IntPtr cppBoard;
-        
+        //static AHRS.MadgwickAHRS AHRS = new AHRS.MadgwickAHRS(1f / 256f, 0.1f);
+
         public DeviceSetup() {
             this.InitializeComponent();
         }
@@ -67,20 +68,36 @@ namespace MbientLab.MetaWear.Template {
             System.Diagnostics.Debug.WriteLine(Marshal.PtrToStructure<CartesianFloat>(data.value));
         });
 
+        private Fn_IntPtr magDataHandler = new Fn_IntPtr(pointer => {
+            System.Diagnostics.Debug.WriteLine("Magnetometer");
+            Data data = Marshal.PtrToStructure<Data>(pointer);
+            System.Diagnostics.Debug.WriteLine(Marshal.PtrToStructure<CartesianFloat>(data.value));
+        });
+
         private void accStart_Click(object sender, RoutedEventArgs e)
         {
-            IntPtr accSignal = mbl_mw_acc_get_acceleration_data_signal(cppBoard);
+            //Accelerometer
+            //IntPtr accSignal = mbl_mw_acc_get_acceleration_data_signal(cppBoard);
 
-            mbl_mw_datasignal_subscribe(accSignal, accDataHandler);
-            mbl_mw_acc_enable_acceleration_sampling(cppBoard);
-            mbl_mw_acc_start(cppBoard);
+            //mbl_mw_datasignal_subscribe(accSignal, accDataHandler);
+            //mbl_mw_acc_enable_acceleration_sampling(cppBoard);
+            //mbl_mw_acc_start(cppBoard);
             // System.Diagnostics.Debug.WriteLine("Start button hit.");
 
-            IntPtr stateSignal = mbl_mw_gyro_bmi160_get_rotation_data_signal(cppBoard);
 
-            mbl_mw_datasignal_subscribe(stateSignal, gyroDataHandler);
-            mbl_mw_gyro_bmi160_enable_rotation_sampling(cppBoard);
-            mbl_mw_gyro_bmi160_start(cppBoard);
+            //Gyroscope
+            //IntPtr stateSignal = mbl_mw_gyro_bmi160_get_rotation_data_signal(cppBoard);
+
+            //mbl_mw_datasignal_subscribe(stateSignal, gyroDataHandler);
+            //mbl_mw_gyro_bmi160_enable_rotation_sampling(cppBoard);
+            //mbl_mw_gyro_bmi160_start(cppBoard);
+
+            //Magnetometer
+            IntPtr magSignal = mbl_mw_mag_bmm150_get_b_field_data_signal(cppBoard);
+
+            mbl_mw_datasignal_subscribe(magSignal, magDataHandler);
+            mbl_mw_mag_bmm150_enable_b_field_sampling(cppBoard);
+            mbl_mw_mag_bmm150_start(cppBoard);
 
         }
 
